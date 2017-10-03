@@ -1,14 +1,27 @@
+// You'll want to get in the habit of wrapping your code in some kind of
+// function block - this prevents variables from being leaked onto the global
+// scope which can prevent bugs from naming collisions with other code.
+
+
 //Global section declaring variables.
+// pretty nitpicky, but I'd encourage you to keep your spacing consistent
+// with variable declarations. For instance, always have a space between the 
+// variable name and equal sign and another space between the equal sign
+// and the value you're assigning to the variable.
 var wins =0;
 var loses =0;
 var unanswered = 0;
 var counter =30;
 var userAnswer = [];
 var timeInterval=undefined;
+
+// since `myQuestions` is really just an indexed list of question objects, I'd suggest
+// just storing them in an array.
 var myQuestions = {
   1: {
     "question": " Inside which HTML element do we put the JavaScript?",
     "answers": {
+      // same comment as above about just storing these in an array.
       1: '<js>',
       2: '<script>',
       3: '<scripting>',
@@ -263,6 +276,7 @@ var myQuestions = {
 //document ready block.
 $( document ).ready(function() {
   //creating the UI.
+  // I really like how you made the UI generation dynamically as part of a function 👌
   appUI();
   // Submit button On click actions.
   $(document).on("click", ".submit", showResults);
@@ -306,6 +320,8 @@ function start(){
 
 
   //adding timer counter to the screen.
+  // Semi-colons are almost always optional in JS due to automatic semi-colon insertion so you should
+  // feel free to omit them. I would however urge you to stay consistent one way or the other 😬
   $('.quiz-body').append(timerdiv)
   timerdiv.append(timerCounter)
   // start Timer.
@@ -336,6 +352,17 @@ function buildQuiz(){
     questionForm.addClass(qclass);
     questionsDiv.append(questionForm);
     questionForm.append(index + '. ' + myQuestions[index]["question"] + '<br>');
+
+    // This code is a bit repetitive so I'd look to move this code into a loop so as to DRY it up a bit.
+    // Could look something like this:
+
+    // for (var i = 1; i <= 4; i ++) {
+    //   questionForm.append($('<label>').text(" " + myQuestions[index]["answers"][i])
+    //                  .prepend($('<input type="radio" name="mychoice" class ="radioBtn" id="' + i + '" autofocus>',
+    //                             { value: myQuestions[index]["answers"][i]})));
+    //   questionForm.append('<br>');
+    // }
+
     questionForm.append($('<label>').text(" " + myQuestions[index]["answers"][1])
                    .prepend($('<input type="radio" name="mychoice" class ="radioBtn" id="1" autofocus>',
                               { value: myQuestions[index]["answers"][1]})));
@@ -361,6 +388,8 @@ function showResults() {
   var qClass = '';
   // this for loop is getting all the filled values from document question forms and putting into userAnswer array. 
   // if the values are not filled '' will be added.
+
+  // Nice job doing this answer retireval dynamically!
   for (i=0;i<25;i++){
     var j = i +1;
     qClass = ".qClass" + j + ' ' + 'input:checked';
